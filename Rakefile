@@ -30,16 +30,19 @@ task :test_casper => :build do
   end
 
   puts "start Rack server"
-  server = Rack::Server.new({:config => "config.ru", :Port => 9292})
-  pid = fork do
+  pid = Thread.new do
+    server = Rack::Server.new({
+      :config => "config.ru",
+      :Port => 9292,
+      :Logger => nil
+    })
     server.start
   end
 
   puts "Running #{APPNAME} Casper.js tests"
   success = system("casperjs test app/tests/casper.js/")
   
-  Process.kill "KILL", pid
-  Process.wait pid
+  pid.kill
 
   if success
     puts "Tests Passed".green

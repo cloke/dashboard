@@ -1,6 +1,6 @@
-casper.test.comment('Clicking on a user changes route');
+casper.test.comment('Clicking on a user when watching a specific repository changes route to user');
 
-casper.start('http://localhost:9292/#/pangratz');
+casper.start('http://localhost:9292/#/nokinen/fdc');
 
 casper.waitFor(function check() {
     return this.evaluate(function() {
@@ -11,9 +11,8 @@ casper.waitFor(function check() {
 function then() {
     this.click('a.username');
 });
-
 casper.then(function() {
-    this.test.assertEquals(this.getCurrentUrl(), 'http://localhost:9292/#/apache', 'routes to clicked user');
+    this.test.assertEquals(this.getCurrentUrl(), 'http://localhost:9292/#/nokinen', 'routes to clicked user');
 });
 
 casper.run(function() {

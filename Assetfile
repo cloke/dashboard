@@ -138,10 +138,7 @@ end
 
 output 'test_assets'
 input 'app' do
-  match 'tests/casper.js/**/*' do
-    filter LoaderFilter
-  end
-  match 'tests/**/*.js' do
+  match 'tests/{unit,integration}/**/*.js' do
     filter LoaderFilter,
       :module_id_generator => proc { |input|
         input.path.sub(/^lib\//, "#{APPNAME}/").sub(/\.js$/, '')
