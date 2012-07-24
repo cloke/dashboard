@@ -1,7 +1,7 @@
 <div class="row">Watched repositories:</div>
 <div class="row" >
     {{#each repository in controller}}
-        <a {{action showUser context="repository.owner.login"}} >{{repository.owner.login}}</a> / <a {{action showRepository context="repository.full_name"}} >{{repository.name}}</a>
+        <a class="username" {{action showUser context="repository.owner.login"}} >{{repository.owner.login}}</a> / <a {{action showRepository context="repository.full_name"}} >{{repository.name}}</a>
         {{repository.description}}
         <dl class="dl-horizontal">
     {{/each}}

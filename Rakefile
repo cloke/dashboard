@@ -3,6 +3,7 @@ APPNAME = 'dashboard'
 require 'colored'
 require 'rake-pipeline'
 require 'versionomy'
+require 'rack'
 
 def pipeline
   Rake::Pipeline::Project.new('Assetfile')
@@ -20,6 +21,32 @@ end
 desc "Build #{APPNAME}"
 task :build => :clean do
   pipeline.invoke
+end
+
+desc "Run casper.js tests"
+task :test_casper => :build do
+  unless system("which casperjs > /dev/null 2>&1")
+    abort "Casper.js is not installed. Download from http://casperjs.org/"
+  end
+
+  puts "start Rack server"
+  server = Rack::Server.new({:config => "config.ru", :Port => 9292})
+  pid = fork do
+    server.start
+  end
+
+  puts "Running #{APPNAME} Casper.js tests"
+  success = system("casperjs test app/tests/casper.js/")
+  
+  Process.kill "KILL", pid
+  Process.wait pid
+
+  if success
+    puts "Tests Passed".green
+  else
+    puts "Tests Failed".red
+    exit(1)
+  end
 end
 
 desc "Run tests with PhantomJS"
